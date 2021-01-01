@@ -25,7 +25,7 @@ void setup()
   MCP.pinMode8(1, 0x00);
   Wire.setClock(50);
 
-  Serial.println("TEST digitalWrie(0)");
+  Serial.println("TEST digitalWrite(0)");
   for (int i = 0; i < 16; i++)
   {
     MCP.digitalWrite(0, i % 2);  // alternating HIGH/LOW
@@ -36,7 +36,7 @@ void setup()
   Serial.println();
   Serial.println();
 
-  Serial.println("TEST digitalWrie(pin)");
+  Serial.println("TEST digitalWrite(pin)");
   for (int pin = 0; pin < 16; pin++)
   {
     MCP.digitalWrite(pin, 1 - pin % 2); // alternating HIGH/LOW
