@@ -66,11 +66,15 @@ unittest(test_new_operator)
 
 unittest(test_constructor)
 {
+  Wire.resetMocks();
+
   fprintf(stderr, "VERSION: %s\n", MCP23017_LIB_VERSION);
 
   MCP23017 MCP(0x27);
+  assertFalse(Wire.didBegin());
   MCP.begin();
-  
+  assertTrue(Wire.didBegin());
+
   assertTrue(MCP.isConnected());
 
 }
