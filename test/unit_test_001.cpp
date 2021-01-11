@@ -48,9 +48,6 @@ unittest_teardown()
 // TODO more tests if godmode->wire works
 unittest(test_constructor)
 {
-  
-unittest(test_constructor)
-{
   Wire.resetMocks();
 
   fprintf(stderr, "VERSION: %s\n", MCP23017_LIB_VERSION);
