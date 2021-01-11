@@ -46,7 +46,6 @@ unittest_teardown()
 
 
 // TODO more tests if godmode->wire works
-
 unittest(test_constructor)
 {
   
