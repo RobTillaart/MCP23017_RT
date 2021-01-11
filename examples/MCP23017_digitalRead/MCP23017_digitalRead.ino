@@ -2,12 +2,12 @@
 //    FILE: MCP23017_test.ino
 //  AUTHOR: Rob Tillaart
 //    DATE: 2019-10-14
-//
 // PUPROSE: test MCP23017 library
-//
+
 
 #include "MCP23017.h"
-#include <Wire.h>
+#include "Wire.h"
+
 
 MCP23017 MCP(0x38);
 
