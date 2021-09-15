@@ -1,7 +1,7 @@
 //
 //    FILE: MCP23017.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.3
+// VERSION: 0.2.4
 // PURPOSE: Arduino library for I2C MCP23017 16 channel port expander
 //    DATE: 2019-10-12
 //     URL: https://github.com/RobTillaart/MCP23017_RT
@@ -15,6 +15,7 @@
 //  0.2.1   2021-02-17  fix #7 DDR is defined in ESP32
 //  0.2.2   2021-04-23  fix for plpatformIO compatifbility
 //  0.2.3   2021-06-06  add lastError() unit test + minor refactor.
+//  0.2.4   2021-06-06  add input polarity and pullup control, more error checking
 
 
 #include "MCP23017.h"
@@ -22,6 +23,8 @@
 
 #define MCP23017_DDR_A        0x00   // Data Direction Register
 #define MCP23017_DDR_B        0x01
+#define MCP23017_POL_A        0x02   // Input Polarity (0 == normal 1== reversed)
+#define MCP23017_POL_B        0x03
 #define MCP23017_PUR_A        0x0C   // Pull Up Resistors
 #define MCP23017_PUR_B        0x0D
 
@@ -44,11 +47,11 @@ bool MCP23017::begin(const uint8_t dataPin, const uint8_t clockPin)
 {
   _wire = &Wire;
   _wire->begin(dataPin, clockPin);
-    if (! isConnected()) return false;
+  if (! isConnected()) return false;
   // Force INPUT_PULLUP
-  writeReg(MCP23017_IOCR, 0b00100000); // disable addres increment (datasheet)
-  writeReg(MCP23017_PUR_A, 0xFF);
-  writeReg(MCP23017_PUR_B, 0xFF);
+  if (! writeReg(MCP23017_IOCR, 0b00100000)) return false; // disable addres increment (datasheet)
+  if (! writeReg(MCP23017_PUR_A, 0xFF)) return false;
+  if (! writeReg(MCP23017_PUR_B, 0xFF)) return false;
   return true;
 }
 #endif
@@ -59,9 +62,9 @@ bool MCP23017::begin()
   _wire->begin();
     if (! isConnected()) return false;
   // Force INPUT_PULLUP
-  writeReg(MCP23017_IOCR, 0b00100000); // disable addres increment (datasheet)
-  writeReg(MCP23017_PUR_A, 0xFF);
-  writeReg(MCP23017_PUR_B, 0xFF);
+  if (! writeReg(MCP23017_IOCR, 0b00100000)) return false; // disable addres increment (datasheet)
+  if (! writeReg(MCP23017_PUR_A, 0xFF)) return false;
+  if (! writeReg(MCP23017_PUR_B, 0xFF)) return false;
   return true;
 }
 
@@ -69,14 +72,21 @@ bool MCP23017::begin()
 bool MCP23017::isConnected()
 {
   _wire->beginTransmission(_addr);
-  return (_wire->endTransmission() == 0);
+  if (_wire->endTransmission() != 0)
+  {
+    _error = MCP23017_I2C_ERROR;
+    return false;
+  }
+  _error = MCP23017_OK;
+  return true;
 }
 
 
 // single pin interface
 // pin  = 0..15
 // mode = INPUT, OUTPUT, INPUT_PULLUP (= same as INPUT)
-bool MCP23017::pinMode(uint8_t pin, uint8_t mode)
+// reversed = if true input bit defined as reversed
+bool MCP23017::pinMode(uint8_t pin, uint8_t mode, bool reversed)
 {
   if (pin > 15)
   {
@@ -96,6 +106,7 @@ bool MCP23017::pinMode(uint8_t pin, uint8_t mode)
     pin -= 8;
   }
   uint8_t val = readReg(dataDirectionRegister);
+  if (_error != MCP23017_OK) return false;
   uint8_t mask = 1 << pin;
   // only work with valid
   if (mode == INPUT || mode == INPUT_PULLUP)
@@ -108,8 +119,27 @@ bool MCP23017::pinMode(uint8_t pin, uint8_t mode)
   }
   // other values won't change val ....
   writeReg(dataDirectionRegister, val);
-  _error = MCP23017_OK;
-  return true;
+  if (_error != MCP23017_OK) return false;
+  
+  uint8_t inputPolarityRegister = MCP23017_POL_A;
+  if (pin > 7)
+  {
+    inputPolarityRegister = MCP23017_POL_B;
+    pin -= 8;
+  }
+  val = readReg(inputPolarityRegister);
+  if (_error != MCP23017_OK) return false;
+  mask = 1 << pin;
+  if (reversed)
+  {
+    val |= mask;
+  }
+  else
+  {
+    val &= ~mask;
+  }
+  writeReg(inputPolarityRegister, val);
+  return (_error == MCP23017_OK);
 }
 
 
@@ -127,12 +157,12 @@ bool MCP23017::digitalWrite(uint8_t pin, uint8_t value)   // pin = 0..15
     pin -= 8;
   }
   uint8_t val = readReg(IOR);
+  if (_error != MCP23017_OK) return false;
   uint8_t mask = 1 << pin;
   if (value) val |= mask;
   else val &= ~mask;
   writeReg(IOR, val);
-  _error = MCP23017_OK;
-  return true;
+  return (_error == MCP23017_OK);
 }
 
 
@@ -151,7 +181,7 @@ uint8_t MCP23017::digitalRead(uint8_t pin)
   }
   uint8_t val = readReg(IOR);
   uint8_t mask = 1 << pin;
-  _error = MCP23017_OK;
+  //_error = MCP23017_OK; ..... keep value from readReg
   if (val & mask) return HIGH;
   return LOW;
 }
@@ -161,17 +191,26 @@ uint8_t MCP23017::digitalRead(uint8_t pin)
 // whole register at once
 // port  = 0..1
 // value = bit pattern
-bool MCP23017::pinMode8(uint8_t port, uint8_t value)
+// input_polarity = 0x00 all normal, 0xFF all reversed (bit pattern), default 0x00
+// input_pullup =  0x00 none, 0xFF all (bit pattern), default 0xFF
+bool MCP23017::pinMode8(uint8_t port, uint8_t value, uint8_t input_polarity, uint8_t input_pullup)
 {
   if (port > 1)
   {
     _error = MCP23017_PORT_ERROR;
     return false;
   }
-  if (port == 0) writeReg(MCP23017_DDR_A, value);
-  if (port == 1) writeReg(MCP23017_DDR_B, value);
-  _error = MCP23017_OK;
-  return true;
+  if (port == 0) {
+  	if (! writeReg(MCP23017_DDR_A, value)) return false;
+	  if (! writeReg(MCP23017_POL_A, input_polarity)) return false;
+	  if (! writeReg(MCP23017_PUR_A, input_pullup)) return false;
+  }
+  if (port == 1) {
+    if (! writeReg(MCP23017_DDR_B, value) return false;
+	  if (! writeReg(MCP23017_POL_B, input_polarity) return false;
+	  if (! writeReg(MCP23017_PUR_B, input_pullup) return false;
+  }
+  return (_error == MCP23017_OK);
 }
 
 
@@ -184,8 +223,7 @@ bool MCP23017::write8(uint8_t port, uint8_t value)   // port = 0..1
   }
   if (port == 0) writeReg(MCP23017_GPIOA, value);
   if (port == 1) writeReg(MCP23017_GPIOB, value);
-  _error = MCP23017_OK;
-  return true;
+  return (_error == MCP23017_OK);
 }
 
 
