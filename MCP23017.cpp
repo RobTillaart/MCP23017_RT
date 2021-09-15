@@ -206,9 +206,9 @@ bool MCP23017::pinMode8(uint8_t port, uint8_t value, uint8_t input_polarity, uin
     if (! writeReg(MCP23017_PUR_A, input_pullup)) return false;
   }
   if (port == 1) {
-    if (! writeReg(MCP23017_DDR_B, value) return false;
-    if (! writeReg(MCP23017_POL_B, input_polarity) return false;
-    if (! writeReg(MCP23017_PUR_B, input_pullup) return false;
+    if (! writeReg(MCP23017_DDR_B, value)) return false;
+    if (! writeReg(MCP23017_POL_B, input_polarity)) return false;
+    if (! writeReg(MCP23017_PUR_B, input_pullup)) return false;
   }
   return true;
 }
