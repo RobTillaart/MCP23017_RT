@@ -19,37 +19,39 @@ This library gives easy control over the 16 pins of a MCP23017 chip.
 
 ### Constructor
 
-- **MCP23017(address, TwoWire \*wire = &Wire)** constructor, with default Wire interface. Can be overruled with Wire0..WireN
-- **bool begin()** for UNO, returns true if successful
-- **bool begin(sda, scl)** for ESP32, returns true if successful
-- **bool isConnected()** returns true if connected, false otherwise
+- **MCP23017(address, TwoWire \*wire = &Wire)** constructor, with default Wire interface.  
+Can be overruled with Wire0..WireN.
+- **bool begin()** for UNO, returns true if successful.
+- **bool begin(sda, scl)** for ESP32, returns true if successful.
+- **bool isConnected()** returns true if connected, false otherwise.
 
 
-### single pin interface
+### Single pin interface
 
 - **bool pinMode(pin, value)** pin = 0..15, value = INPUT, OUTPUT, returns true if successful.
 - **bool digitalWrite(pin, value)** pin = 0..15, value = LOW(0) HIGH (!0), returns true if successful.
-- **uint8_t digitalRead(pin)** pin = 0..15
-- **bool setPolarity(uint8_t pin, bool reversed)**
-- **bool getPolarity(uint8_t pin, bool &reversed)**
-- **bool setPullup(uint8_t pin, bool pullup)**
-- **bool getPullup(uint8_t pin, bool &pullup)**
+- **uint8_t digitalRead(pin)** pin = 0..15, returns LOW or HIGH, might set the lastError();
+- **bool setPolarity(uint8_t pin, bool reversed)** pin = 0..15, set reversed flag, returns true if successful.
+- **bool getPolarity(uint8_t pin, bool &reversed)** pin = 0..15, reads reversed flag, returns true if successful.
+- **bool setPullup(uint8_t pin, bool pullup)** pin = 0..15, set pullup flag, returns true if successful.
+- **bool getPullup(uint8_t pin, bool &pullup)** pin = 0..15, reads pullup flag, returns true if successful.
 
 
 ### 8 pins interface
 
-- **bool pinMode8(port, value)** port = 0, 1  value = 0..255, returns true if successful.
-- **bool write8(port, value)** port = 0, 1  value = 0..255, returns true if successful.
-- **uint8_t read8(port)** port = 0, 1
-- **bool setPolarity8(uint8_t port, uint8_t mask)**
-- **bool getPolarity8(uint8_t port, uint8_t &mask)**
-- **bool setPullup8(uint8_t port, uint8_t mask)**
-- **bool getPullup8(uint8_t port, uint8_t &mask)**
+- **bool pinMode8(port, value)** port = 0..1, value = 0..255, returns true if successful.
+- **bool write8(port, value)** port = 0..1, value = 0..255, returns true if successful.
+- **uint8_t read8(port)** port = 0..1, reads 8 pins into one byte.
+- **bool setPolarity8(uint8_t port, uint8_t mask)** port = 0..1, sets polarity for 8 channels at once.
+- **bool getPolarity8(uint8_t port, uint8_t &mask)** port = 0..1, reads polarity of 8 channels at once.
+- **bool setPullup8(uint8_t port, uint8_t mask)** port = 0..1,, sets pullup for 8 channels at once.
+- **bool getPullup8(uint8_t port, uint8_t &mask)** port = 0..1, reads pullup for 8 channels at once.
 
 
 ### Error codes
 
-- **int lastError()** Above functions set an error flag that can be read withthis function. Reading it will reset the flag to **MCP23017_OK**.
+- **int lastError()** Above functions set an error flag that can be read with this function.  
+Reading it will reset the flag to **MCP23017_OK**.
 
 | DESCRIPTION           | VALUE |
 |:----------------------|:-----:|
@@ -65,15 +67,14 @@ This library gives easy control over the 16 pins of a MCP23017 chip.
 
 #### Must
 
-- extend documentation
+- Improve and extend documentation
 - add pinMode16(), write16() and read16()
-- investigate PULL_UP register see begin() => pinMode()  (breaking change)
+- add examples
 
 
 #### Should
 
-- investigate caching for performance (read back)
-- extend error codes?
+- extend error codes
 - optimize code - squeeze footprint
 - optimize code - do not write if pin does not chance (~25%)
 
