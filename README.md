@@ -1,11 +1,13 @@
 
 [![Arduino CI](https://github.com/RobTillaart/MCP23017_RT/workflows/Arduino%20CI/badge.svg)](https://github.com/marketplace/actions/arduino_ci)
+[![Arduino-lint](https://github.com/RobTillaart/MCP23017_RT/actions/workflows/arduino-lint.yml/badge.svg)](https://github.com/RobTillaart/MCP23017_RT/actions/workflows/arduino-lint.yml)
+[![JSON check](https://github.com/RobTillaart/MCP23017_RT/actions/workflows/jsoncheck.yml/badge.svg)](https://github.com/RobTillaart/MCP23017_RT/actions/workflows/jsoncheck.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/MCP23017_RT/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/RobTillaart/MCP23017_RT.svg?maxAge=3600)](https://github.com/RobTillaart/MCP23017_RT/releases)
 
 # MCP23017_RT
 
-Arduino library for MCP23017 16 channel I2C port expander
+Arduino library for MCP23017 16 channel I2C port expander.
 
 
 ## Description
@@ -28,6 +30,10 @@ This library gives easy control over the 16 pins of a MCP23017 chip.
 - **bool pinMode(pin, value)** pin = 0..15, value = INPUT, OUTPUT, returns true if successful.
 - **bool digitalWrite(pin, value)** pin = 0..15, value = LOW(0) HIGH (!0), returns true if successful.
 - **uint8_t digitalRead(pin)** pin = 0..15
+- **bool setPolarity(uint8_t pin, bool reversed)**
+- **bool getPolarity(uint8_t pin, bool &reversed)**
+- **bool setPullup(uint8_t pin, bool pullup)**
+- **bool getPullup(uint8_t pin, bool &pullup)**
 
 
 ### 8 pins interface
@@ -35,6 +41,10 @@ This library gives easy control over the 16 pins of a MCP23017 chip.
 - **bool pinMode8(port, value)** port = 0, 1  value = 0..255, returns true if successful.
 - **bool write8(port, value)** port = 0, 1  value = 0..255, returns true if successful.
 - **uint8_t read8(port)** port = 0, 1
+- **bool setPolarity8(uint8_t port, uint8_t mask)**
+- **bool getPolarity8(uint8_t port, uint8_t &mask)**
+- **bool setPullup8(uint8_t port, uint8_t mask)**
+- **bool getPullup8(uint8_t port, uint8_t &mask)**
 
 
 ### Error codes
@@ -52,14 +62,24 @@ This library gives easy control over the 16 pins of a MCP23017 chip.
 
 ## Future
 
+
 #### Must
+
+- extend documentation
 - add pinMode16(), write16() and read16()
 - investigate PULL_UP register see begin() => pinMode()  (breaking change)
 
+
 #### Should
-- investigate caching for performance (readback)
+
+- investigate caching for performance (read back)
+- extend error codes?
+- optimize code - squeeze footprint
+- optimize code - do not write if pin does not chance (~25%)
+
 
 #### Could
+
 - initial value (16 bit?) as begin parameter (breaking change)
   - depends on input output pullup etc?
 - investigate auto address increment?
