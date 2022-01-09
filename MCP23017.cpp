@@ -51,7 +51,7 @@
 
 MCP23017::MCP23017(uint8_t address, TwoWire *wire)
 {
-  _address  = addr;
+  _address  = address;
   _wire     = wire;
   _error    = MCP23017_OK;
 }
@@ -157,10 +157,10 @@ bool MCP23017::digitalWrite(uint8_t pin, uint8_t value)
     _error = MCP23017_PIN_ERROR;
     return false;
   }
-  uint8_t IOR = MCP23017_GPIOA;
+  uint8_t IOR = MCP23017_GPIO_A;
   if (pin > 7)
   {
-    IOR = MCP23017_GPIOB;
+    IOR = MCP23017_GPIO_B;
     pin -= 8;
   }
 
@@ -195,10 +195,10 @@ uint8_t MCP23017::digitalRead(uint8_t pin)
     _error = MCP23017_PIN_ERROR;
     return MCP23017_INVALID_READ;
   }
-  uint8_t IOR = MCP23017_GPIOA;
+  uint8_t IOR = MCP23017_GPIO_A;
   if (pin > 7)
   {
-    IOR = MCP23017_GPIOB;
+    IOR = MCP23017_GPIO_B;
     pin -= 8;
   }
 
@@ -363,8 +363,8 @@ bool MCP23017::write8(uint8_t port, uint8_t value)   // port = 0..1
     _error = MCP23017_PORT_ERROR;
     return false;
   }
-  if (port == 0) writeReg(MCP23017_GPIOA, value);
-  if (port == 1) writeReg(MCP23017_GPIOB, value);
+  if (port == 0) writeReg(MCP23017_GPIO_A, value);
+  if (port == 1) writeReg(MCP23017_GPIO_B, value);
   _error = MCP23017_OK;
   return true;
 }
@@ -378,8 +378,8 @@ int MCP23017::read8(uint8_t port)
     return MCP23017_INVALID_READ;
   }
   _error = MCP23017_OK;
-  if (port == 0) return readReg(MCP23017_GPIOA);
-  return readReg(MCP23017_GPIOB);  // port == 1
+  if (port == 0) return readReg(MCP23017_GPIO_A);
+  return readReg(MCP23017_GPIO_B);  // port == 1
 }
 
 
