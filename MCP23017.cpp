@@ -18,7 +18,7 @@
 //  0.2.4   2021-09-16  add polarity and pull-up support
 //  0.2.5   2021-12-21  update library.json, license, minor edits
 //  0.2.6   2022-01-09  add 16 bit interface
-//  
+//                      update register defines
 
 
 #include "MCP23017.h"
@@ -541,36 +541,6 @@ bool MCP23017::getPullup16(uint16_t &mask)
   }
   return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 int MCP23017::lastError()
