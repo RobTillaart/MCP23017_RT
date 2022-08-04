@@ -25,6 +25,8 @@ void setup()
 
   Wire.begin();
   bool b = MCP.begin();
+  Serial.print("BEGIN: ");
+  Serial.println(b);
 
   MCP.pinMode8(0, 0x00);  // 0 = output , 1 = input
   MCP.pinMode8(1, 0x00);
@@ -111,6 +113,7 @@ void setup()
   volatile uint16_t val16 = MCP.read16();
   stop = micros();
   Serial.println((stop - start) / 2.0);
+  Serial.println(val16);           //  keep build CI compiler happy
   Serial.println();
 
   Serial.println("\ndone...");
