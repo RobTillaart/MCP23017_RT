@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/MCP23017_RT/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/RobTillaart/MCP23017_RT.svg?maxAge=3600)](https://github.com/RobTillaart/MCP23017_RT/releases)
-[![PlatformIO Registry](https://badges.registry.platformio.org/packages/robtillaart/library/MCP23017_RT.svg)](https://registry.platformio.org/libraries/robtillaart/MCP23017_RT)
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/robtillaart/library/MCP23017.svg)](https://registry.platformio.org/libraries/robtillaart/MCP23017)
 
 
 # MCP23017_RT
