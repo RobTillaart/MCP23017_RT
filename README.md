@@ -138,20 +138,17 @@ Reading it will reset the flag to **MCP23017_OK**.
 - Improve and extend documentation
 - add examples
 
-
 #### Should
 
 - extend error codes
 - optimize code - squeeze footprint
 - investigate if REV D chips can be detected.
-- add keywords.txt
 
 #### Could
 
 - initial value (16 bit?) as begin parameter (breaking change)
   - depends on input output pull-up etc
 - investigate auto address increment
-
 
 #### Wont
 
