@@ -36,7 +36,7 @@ void setup()
 
 
   //  do not set INPUT PULLUP
-  bool b = MCP.begin(false);
+  b = MCP.begin(false);
   Serial.println(b);
   MCP.pinMode8(0, 0x00);
   MCP.pinMode8(1, 0x00);
