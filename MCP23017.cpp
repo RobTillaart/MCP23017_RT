@@ -180,8 +180,8 @@ uint8_t MCP23017::read1(uint8_t pin)
 }
 
 
-//  pin  = 0..15
-//  reverse = true or false
+//  pin      = 0..15
+//  reversed = true or false
 bool MCP23017::setPolarity(uint8_t pin,  bool reversed)
 {
   if (pin > 15)
@@ -242,7 +242,7 @@ bool MCP23017::getPolarity(uint8_t pin, bool &reversed)
 }
 
 
-//  pin  = 0..15
+//  pin    = 0..15
 //  pullup = true or false
 bool MCP23017::setPullup(uint8_t pin,  bool pullup)
 {
@@ -617,7 +617,8 @@ uint16_t MCP23017::getInterruptCaptureRegister()
   return readReg16(MCP23x17_INTCAP_A);
 }
 
-  //       polarity: 0 = LOW, 1 = HIGH, 2 = NONE/ODR
+
+//       polarity: 0 = LOW, 1 = HIGH, 2 = NONE/ODR
 bool MCP23017::setInterruptPolarity(uint8_t polarity)
 {
   if (polarity > 2) return false;
@@ -659,7 +660,7 @@ bool MCP23017::isMirroredInterrupts()
 int MCP23017::lastError()
 {
   int e = _error;
-  _error = MCP23017_OK;     //  reset error after read.
+  _error = MCP23017_OK;  //  reset error after read.
   return e;
 }
 
