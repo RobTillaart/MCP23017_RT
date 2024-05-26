@@ -44,7 +44,7 @@ Some details see:
 
 Note: the library has no provisions (yet) for detecting DEV D chips or handle them in a special way.
 There is an idea to implement a derived class MCP23017_REVD that provides automatic support.
-However low prio. 
+However low priority. 
 
 Note that the MCP23S017 (SPI version) does not have this "feature" for GPA7 and GPB7.
 
@@ -190,7 +190,7 @@ The reading and writing to registers have been performance optimized for the 16 
 If there are problems please open an issue.
 
 
-### Interrupts (experimental 0.5.2)
+### Interrupts (experimental 0.6.3)
 
 Read the datasheet for the details, page 24,25.  
 Note: Error handling is limited.
@@ -199,10 +199,10 @@ pin = 0..15
 mode = { RISING, FALLING, CHANGE }  
 - **bool enableInterrupt(uint8_t pin, uint8_t mode)** 
 Returns true if successful.
-Returns MCP23S17_PIN_ERROR if pin > 15.
+Returns MCP23017_PIN_ERROR if pin > 15.
 - **bool disableInterrupt(uint8_t pin)**
 Returns true if successful.
-Returns MCP23S17_PIN_ERROR if pin > 15.
+Returns MCP23017_PIN_ERROR if pin > 15.
 
 
 16 pin interface, overrides all earlier settings. 
@@ -296,7 +296,7 @@ Reading it will reset the flag to **MCP23017_OK**.
   - what is performance gain vs footprint?
 - investigate and reimplement the INPUT_PULLUP for pinMode() ?
 - initial value (16 bit?) as begin parameter (breaking change)
-  - depends on input output pull-up etc
+  - depends on input output pull-up etc.
 - create a derived class **MCP23017_REVD**
 
 #### Wont
