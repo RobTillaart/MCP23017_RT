@@ -537,7 +537,7 @@ bool MCP23017::enableInterrupt(uint8_t pin, uint8_t mode)
 
   uint8_t intcon = readReg(INTCONREG);
   uint8_t pre_intcon = intcon;
-  if (_error != MCP23S17_OK)
+  if (_error != MCP23017_OK)
   {
     return false;
   }
@@ -567,7 +567,7 @@ bool MCP23017::enableInterrupt(uint8_t pin, uint8_t mode)
     if (pre_defval != defval)
     {
       writeReg(DEFVALREG, defval);
-      if (_error != MCP23S17_OK)
+      if (_error != MCP23017_OK)
       {
         return false;
       }
@@ -577,7 +577,7 @@ bool MCP23017::enableInterrupt(uint8_t pin, uint8_t mode)
   if (pre_intcon != intcon)
   {
     writeReg(INTCONREG, intcon);
-    if (_error != MCP23S17_OK)
+    if (_error != MCP23017_OK)
     {
       return false;
     }
@@ -614,7 +614,7 @@ bool MCP23017::disableInterrupt(uint8_t pin)
   //  disable interrupt
   uint8_t gpinten = readReg(GPINTENREG);
   uint8_t pre_gpinten = gpinten;
-  if (_error != MCP23S17_OK)
+  if (_error != MCP23017_OK)
   {
     return false;
   }
