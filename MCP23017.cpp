@@ -95,6 +95,8 @@ bool MCP23017::pinMode1(uint8_t pin, uint8_t mode)
   //  only work with valid
   if ((mode == INPUT) || (mode == INPUT_PULLUP))
   {
+    //  REV D 
+    //  if (pin == 7) return false;
     val |= mask;
   }
   else if (mode == OUTPUT)
@@ -169,7 +171,6 @@ uint8_t MCP23017::read1(uint8_t pin)
     IOR = MCP23x17_GPIO_B;
     pin -= 8;
   }
-
   uint8_t val = readReg(IOR);
   if (_error != MCP23017_OK)
   {

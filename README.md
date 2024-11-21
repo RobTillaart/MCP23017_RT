@@ -29,7 +29,7 @@ If a pin is not changed it will not be written again to save time.
 
 The I2C IO expander MCP23017 has changed according to the new data sheet. 
 It is now described as a 14/16-bit IO expander.
-The pins GPA7 (7) and GPB7 (15) have lost their input mode, output mode still works.
+The pins **GPA7** (7) and **GPB7** (15) have lost their input mode, output mode still works.
 The chips look the same and did not change names.
 This implies it not possible to read 8 bits in parallel at the exact same moment if you have a REV D die.
 The REV D version now need reading both A and B register to get 8 bits parallel (with a minor delay).
@@ -47,7 +47,7 @@ Note: the library has no provisions (yet) for detecting DEV D chips or handle th
 There is an idea to implement a derived class MCP23017_REVD that provides automatic support.
 However no priority. 
 
-Note that the MCP23S017 (SPI version) does not have this "feature" for GPA7 and GPB7.
+Note that the MCP23S017 (SPI version) does not have this "feature" for **GPA7** and **GPB7**.
 
 
 ### 0.8.0 Breaking change
