@@ -7,7 +7,8 @@
 //    DATE: 2019-10-12
 //     URL: https://github.com/RobTillaart/MCP23017_RT
 //
-// WARNING: please read REV D note in readme.md.
+// WARNING: please read REV D note in readme.md 
+//          about pin 7 and 15 and INPUT mode.
 
 
 #include "Arduino.h"
@@ -39,6 +40,7 @@ public:
   //       single pin interface
   //       mode = INPUT, OUTPUT, INPUT_PULLUP (= same as INPUT)
   //             do not use 0, 1 for mode.
+  //       See readme.md section REV D
   bool     pinMode1(uint8_t pin, uint8_t mode);
   bool     write1(uint8_t pin, uint8_t value);
   uint8_t  read1(uint8_t pin);
