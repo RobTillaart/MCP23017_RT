@@ -27,10 +27,11 @@ If a pin is not changed it will not be written again to save time.
 
 ### REV D - June 2022
 
-The I2C IO expander MCP23017 has changed according to the new data sheet. It is now a 14/16-bit IO expander.
+The I2C IO expander MCP23017 has changed according to the new data sheet. 
+It is now described as a 14/16-bit IO expander.
 The pins GPA7 (7) and GPB7 (15) have lost their input mode, output mode still works.
 The chips look the same and did not change names.
-This implies it not possible to read 8 bits in parallel at the exact same moment any more.
+This implies it not possible to read 8 bits in parallel at the exact same moment if you have a REV D die.
 The REV D version now need reading both A and B register to get 8 bits parallel (with a minor delay).
 
 Some details see:
@@ -40,11 +41,11 @@ Some details see:
 - https://microchip.my.site.com/s/article/GPA7---GPB7-Cannot-Be-Used-as-Inputs-In-MCP23017
 - https://www.elektormagazine.com/articles/breakout-board-mcp23017  (comment)
 - https://forums.raspberrypi.com/viewtopic.php?t=91209&sid=f8c6df7c8ede76937a66503edfe25394
-
+- https://github.com/RobTillaart/MCP23017_RT/issues/40  (some notes).
 
 Note: the library has no provisions (yet) for detecting DEV D chips or handle them in a special way.
 There is an idea to implement a derived class MCP23017_REVD that provides automatic support.
-However low priority. 
+However no priority. 
 
 Note that the MCP23S017 (SPI version) does not have this "feature" for GPA7 and GPB7.
 
@@ -309,7 +310,6 @@ Reading it will reset the flag to **MCP23017_OK**.
   - extend error codes
 - optimize code - squeeze footprint
 - fix TODO's in code
-- investigate if REV D chips can be detected.
 
 #### Could
 
@@ -319,9 +319,11 @@ Reading it will reset the flag to **MCP23017_OK**.
 - investigate and reimplement the INPUT_PULLUP for pinMode() ?
 - initial value (16 bit?) as begin parameter (breaking change)
   - depends on input output pull-up etc.
-- create a derived class **MCP23017_REVD**
 
 #### Wont
+
+- investigate if REV D chips can be detected.
+- create a derived class **MCP23017_REVD** => see issue #40
 
 
 ## Support
