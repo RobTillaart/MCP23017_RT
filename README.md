@@ -319,6 +319,7 @@ Reading it will reset the flag to **MCP23017_OK**.
 - investigate and reimplement the INPUT_PULLUP for pinMode() ?
 - initial value (16 bit?) as begin parameter (breaking change)
   - depends on input output pull-up etc.
+- **getPinMode(), getPinMode8(), getPinMode16()**
 
 #### Wont
 
