@@ -628,6 +628,42 @@ bool MCP23017::disableInterrupt(uint8_t pin)
 }
 
 
+bool MCP23017::enableInterrupt8(uint8_t port, uint8_t mask, uint8_t mode)
+{
+  if (port > 1)
+  {
+    _error = MCP23017_PORT_ERROR;
+    return false;
+  }
+
+  uint16_t intcon = 0, defval = 0;
+  //  right mode
+  if (mode == CHANGE)
+  {
+    //  compare to previous value.
+    intcon = ~mask;
+  }
+  else
+  {
+    if (mode == RISING)
+    {
+      intcon = mask;
+      defval = ~mask;  //  RISING == compare to 0
+    }
+    else if (mode == FALLING)
+    {
+      intcon = mask;
+      defval = mask;  //  FALLING == compare to 1
+    }
+    writeReg(port == 0 ? MCP23x17_DEFVAL_A: MCP23x17_DEFVAL_B, defval);
+  }
+  writeReg(port == 0 ? MCP23x17_INTCON_A : MCP23x17_INTCON_B, intcon);
+
+  //  enable the mask
+  writeReg(port == 0 ? MCP23x17_GPINTEN_A : MCP23x17_GPINTEN_B, mask);
+  return true;
+}
+
 bool MCP23017::enableInterrupt16(uint16_t mask, uint8_t mode)
 {
   uint16_t intcon = 0, defval = 0;
@@ -656,6 +692,18 @@ bool MCP23017::enableInterrupt16(uint16_t mask, uint8_t mode)
   //  enable the mask
   writeReg16(MCP23x17_GPINTEN_A, mask);
   return true;
+}
+
+
+bool MCP23017::disableInterrupt8(uint8_t port, uint8_t mask)
+{
+  if (port > 1)
+  {
+    _error = MCP23017_PORT_ERROR;
+    return false;
+  }
+
+  return writeReg(port == 0 ? MCP23x17_GPINTEN_A : MCP23x17_GPINTEN_B, ~mask);
 }
 
 
