@@ -726,6 +726,17 @@ uint16_t MCP23017::getInterruptCaptureRegister()
 }
 
 
+uint8_t MCP23017::getInterruptCaptureRegister8(uint8_t port)
+{
+  if (port > 1)
+  {
+    _error = MCP23017_PORT_ERROR;
+    return false;
+  }
+  return readReg(port == 0 ? MCP23x17_INTCAP_A : MCP23x17_INTCAP_B);
+}
+
+
 //       polarity: 0 = LOW, 1 = HIGH, 2 = NONE/ODR
 bool MCP23017::setInterruptPolarity(uint8_t polarity)
 {

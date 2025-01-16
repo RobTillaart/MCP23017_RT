@@ -96,6 +96,7 @@ public:
   //       which pins caused the INT?
   uint16_t getInterruptFlagRegister();
   uint16_t getInterruptCaptureRegister();
+  uint8_t getInterruptCaptureRegister8(uint8_t port);
 
   //       polarity: 0 = LOW, 1 = HIGH, 2 = NONE/ODR
   bool     setInterruptPolarity(uint8_t polarity);
