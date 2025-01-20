@@ -85,6 +85,10 @@ public:
   bool     enableInterrupt(uint8_t pin, uint8_t mode);
   bool     disableInterrupt(uint8_t pin);
 
+  //       mask = 0x00..0xFF  (overrides all earlier settings.
+  bool     enableInterrupt8(uint8_t port, uint8_t mask, uint8_t mode);
+  bool     disableInterrupt8(uint8_t port, uint8_t mask);
+
   //       mask = 0x0000..0xFFFF  (overrides all earlier settings.
   bool     enableInterrupt16(uint16_t mask, uint8_t mode);
   bool     disableInterrupt16(uint16_t mask);
@@ -92,6 +96,7 @@ public:
   //       which pins caused the INT?
   uint16_t getInterruptFlagRegister();
   uint16_t getInterruptCaptureRegister();
+  uint8_t getInterruptCaptureRegister8(uint8_t port);
 
   //       polarity: 0 = LOW, 1 = HIGH, 2 = NONE/ODR
   bool     setInterruptPolarity(uint8_t polarity);
