@@ -1,7 +1,7 @@
 //
 //    FILE: MCP23017.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.8.0
+// VERSION: 0.8.1
 // PURPOSE: Arduino library for I2C MCP23017 16 channel port expander
 //    DATE: 2019-10-12
 //     URL: https://github.com/RobTillaart/MCP23017_RT
@@ -664,6 +664,7 @@ bool MCP23017::enableInterrupt8(uint8_t port, uint8_t mask, uint8_t mode)
   return true;
 }
 
+
 bool MCP23017::enableInterrupt16(uint16_t mask, uint8_t mode)
 {
   uint16_t intcon = 0, defval = 0;
@@ -702,7 +703,6 @@ bool MCP23017::disableInterrupt8(uint8_t port, uint8_t mask)
     _error = MCP23017_PORT_ERROR;
     return false;
   }
-
   return writeReg(port == 0 ? MCP23x17_GPINTEN_A : MCP23x17_GPINTEN_B, ~mask);
 }
 
